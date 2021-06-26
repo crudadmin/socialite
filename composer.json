@@ -1,0 +1,31 @@
+{
+    "name": "crudadmin/socialite",
+    "type": "library",
+    "description": "Package with full socialute support",
+    "keywords": ["crudadmin", "socialite", "admin", "laravel"],
+    "homepage": "https://marekgogol.sk",
+    "license": "MIT",
+    "authors": [
+        { "name": "Marek Gogoľ", "email": "info@marekgogol.sk" }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "laravel/socialite": "^4.0|^5.2",
+        "crudadmin/crudadmin": "^3.0|^4.0|dev-3.0-dev|dev-4.0-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Admin\\Socialite\\": "src"
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Admin\\Socialite\\Providers\\AppServiceProvider"
+            ]
+        }
+    }
+}
