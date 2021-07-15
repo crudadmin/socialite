@@ -29,4 +29,11 @@ return [
      * Get admin model users eloquent
      */
     'users_table' => 'clients',
+
+    /**
+     * Messages
+     */
+    'messages' => [
+        'error' => _('Prihlásenie cez %s neprebehlo v poriadku, skúste opäť neskôr prosím.'),
+    ],
 ];

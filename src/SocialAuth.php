@@ -31,12 +31,12 @@ class SocialAuth
     /*
      * Error mesage key in error message
      */
-    public static $errorMessageKey = 'errorMessage';
+    static $errorMessageKey = 'errorMessage';
 
     /*
      * Success message key
      */
-    public static $successMessageKey = 'successMessage';
+    static $successMessageKey = 'successMessage';
 
     /**
      * Photo column for stored photo
@@ -593,7 +593,7 @@ class SocialAuth
      */
     public function makeErrorResponse($message = null)
     {
-        $message = $message ?: sprintf('Prihlásenie cez %s neprebehlo v poriadku, skúste opäť neskôr prosím.', $this->driverType);
+        $message = $message ?: sprintf(config('admin_socialite.messages.error'), $this->driverType);
 
         if ( $this->isStateless() ) {
             $path = $this->getPrevious() ?: $this->getBaseDir();
