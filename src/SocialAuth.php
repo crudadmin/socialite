@@ -396,7 +396,7 @@ class SocialAuth
             && $avatar = $this->saveAvatar($this->user)
         ) {
             //We need remove existing photo
-            if ( $existingPhoto ) {
+            if ( $existingPhoto ?? null ) {
                 $existingPhoto->remove();
             }
 
