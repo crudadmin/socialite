@@ -20,8 +20,8 @@ return [
     ],
 
     'paypal' => [
-      'client_id' => env('PAYPAL_CLIENT_ID'),
-      'client_secret' => env('PAYPAL_CLIENT_SECRET'),
+      'client_id' => env('PAYPAL_LIVE_CLIENT_ID'),
+      'client_secret' => env('PAYPAL_LIVE_CLIENT_SECRET'),
       'redirect' => (env('SOCIALITE_APP_URL') ?: env('APP_URL')).'/socialite/paypal/callback'
     ],
 
