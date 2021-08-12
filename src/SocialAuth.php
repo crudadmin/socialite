@@ -4,9 +4,11 @@ namespace Admin\Socialite;
 
 use Admin;
 use Admin\Socialite\Exceptions\SocialDriverException;
+use Admin\Socialite\Exceptions\SocialMessageException;
 use Carbon\Carbon;
 use Crypt;
 use Laravel\Socialite\Facades\Socialite;
+use Exception;
 
 class SocialAuth
 {
@@ -87,6 +89,7 @@ class SocialAuth
         //     return [];
         // },
         // 'DRIVER_MUTATE' => function($driver, SocialAuth $auth){ },
+        // 'DRIVER_MIDDLEWARE' => function($user, $driver, SocialAuth $auth){ },
         // 'USER_FETCH' => function($user, $driver, SocialAuth $auth){ },
         // 'USER_MUTATE' => function($user, $driver, SocialAuth $auth){ },
         // 'USER_UPDATE' => function($user, $driver, SocialAuth $auth){ },
@@ -231,6 +234,8 @@ class SocialAuth
             return $this->makeSuccessResponse();
         } catch (SocialDriverException $error) {
             return $this->makeErrorResponse();
+        } catch (SocialMessageException $error) {
+            return $this->makeErrorResponse($error->getMessage());
         }
     }
 
@@ -266,11 +271,15 @@ class SocialAuth
             //Or if user has been found in db by credentials
             || $this->findByDriverUser()
         ) {
+            $this->driverMiddleware();
+
             $this->updateExistingUser();
         }
 
         //Register new user
         else {
+            $this->driverMiddleware();
+
             $this->registerUser();
         }
 
@@ -317,8 +326,17 @@ class SocialAuth
             $this->setLongLiveAccessToken($token, $expiresIn);
 
             return $this->driver;
-        } catch(\Exception $e){
+        } catch(SocialMessageException $e){
+            throw $e;
+        } catch(Exception $e){
             throw new SocialDriverException($e->getMessage());
+        }
+    }
+
+    private function driverMiddleware()
+    {
+        if ( is_callable(@static::$events['DRIVER_MIDDLEWARE']) ) {
+            static::$events['DRIVER_MIDDLEWARE']($this->user, $this->driver, $this);
         }
     }
 
