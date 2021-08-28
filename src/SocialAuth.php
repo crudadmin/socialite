@@ -13,8 +13,7 @@ use Exception;
 class SocialAuth
 {
     const SESSION_PREFIX = 'socialite';
-    const SESSION_URL_PREVIOUS_KEY = 'socialite.previous';
-    const SESSION_AUTH_TOKEN_KEY = 'socialite.access_token';
+    const SESSION_URL_PREVIOUS_KEY = 'previous';
 
     /*
      * Driver type
@@ -79,6 +78,13 @@ class SocialAuth
         'token' => null,
         'expires_in' => null,
     ];
+
+    /**
+     * This query params should be stored redirect request
+     *
+     * @var  array
+     */
+    protected $queryParamsToStore = ['access_token'];
 
     /**
      * Available social auth events
@@ -389,7 +395,7 @@ class SocialAuth
     private function getLoggedUser($token = null)
     {
         //Use access token from session
-        if ( $token || ($token = session(self::SESSION_AUTH_TOKEN_KEY)) || ($token = request('access_token')) ){
+        if ( $token || ($token = $this->getStorage('access_token')) || ($token = request('access_token')) ){
             request()->headers->set('Authorization', 'Bearer '.$token);
         }
 
@@ -681,7 +687,7 @@ class SocialAuth
 
     public function getPrevious()
     {
-        $previous = session(self::SESSION_URL_PREVIOUS_KEY);
+        $previous = $this->getStorage(self::SESSION_URL_PREVIOUS_KEY);
         $current = url()->current();
 
         //If is same current path
@@ -694,11 +700,17 @@ class SocialAuth
 
     private function setPreviousState()
     {
-        session()->put(self::SESSION_URL_PREVIOUS_KEY, request('url_previous', url()->previous()));
+        $this->setStorage(self::SESSION_URL_PREVIOUS_KEY, request('url_previous', url()->previous()));
 
         //Use access token of logged user
-        if ( $this->isStateless() === true && $accessToken = request('access_token') ) {
-            session()->put(self::SESSION_AUTH_TOKEN_KEY, $accessToken);
+        if ( $this->isStateless() === true ) {
+            $paramsToStore = array_merge($this->queryParamsToStore, array_filter(explode(',', request('store'))));
+
+            foreach ($paramsToStore as $key) {
+                if ( $paramValue = request($key) ) {
+                    $this->setStorage($key, $paramValue);
+                }
+            }
         }
     }
 
@@ -707,5 +719,15 @@ class SocialAuth
         session()->forget(self::SESSION_PREFIX);
 
         return $response;
+    }
+
+    public function setStorage($key, $value)
+    {
+        session()->put(self::SESSION_PREFIX.'.'.$key, $value);
+    }
+
+    public function getStorage($key)
+    {
+        return session()->get(self::SESSION_PREFIX.'.'.$key);
     }
 }
