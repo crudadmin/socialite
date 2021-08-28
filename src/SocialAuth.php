@@ -515,10 +515,14 @@ class SocialAuth
 
         $this->assignSocialData($this->user);
 
-        $this->user->password = str_random(6);
+        $password = $this->user->password = str_random(6);
 
         $this->user->save();
         $this->user->fresh();
+
+        if ( is_callable(@static::$events['USER_CREATED']) ) {
+            static::$events['USER_CREATED']($this->user, $password, $this->getDriver(), $this);
+        }
 
         return $this->user;
     }
@@ -533,7 +537,7 @@ class SocialAuth
         $this->assignSocialData($this->user, true);
 
         if ( is_callable(@static::$events['USER_UPDATE']) ) {
-            static::$events['USER_UPDATE']($this->user, $this->getDriver(), $this,);
+            static::$events['USER_UPDATE']($this->user, $this->getDriver(), $this);
         }
 
         $this->user->save();
