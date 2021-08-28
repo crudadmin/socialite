@@ -12,6 +12,7 @@ use Exception;
 
 class SocialAuth
 {
+    const SESSION_PREFIX = 'socialite';
     const SESSION_URL_PREVIOUS_KEY = 'socialite.previous';
     const SESSION_AUTH_TOKEN_KEY = 'socialite.access_token';
 
@@ -231,12 +232,14 @@ class SocialAuth
         try {
             $this->driverAuthorization($token, $expiresIn);
 
-            return $this->makeSuccessResponse();
+            $response = $this->makeSuccessResponse();
         } catch (SocialDriverException $error) {
-            return $this->makeErrorResponse();
+            $response = $this->makeErrorResponse();
         } catch (SocialMessageException $error) {
-            return $this->makeErrorResponse($error->getMessage());
+            $response = $this->makeErrorResponse($error->getMessage());
         }
+
+        return $this->flushSessionOnResponse($response);
     }
 
     /**
@@ -693,5 +696,12 @@ class SocialAuth
         if ( $this->isStateless() === true && $accessToken = request('access_token') ) {
             session()->put(self::SESSION_AUTH_TOKEN_KEY, $accessToken);
         }
+    }
+
+    private function flushSessionOnResponse($response)
+    {
+        session()->forget(self::SESSION_PREFIX);
+
+        return $response;
     }
 }
