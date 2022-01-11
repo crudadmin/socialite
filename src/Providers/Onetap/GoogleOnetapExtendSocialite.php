@@ -13,6 +13,6 @@ class GoogleOnetapExtendSocialite
      */
     public function handle(SocialiteWasCalled $socialiteWasCalled)
     {
-        $socialiteWasCalled->extendSocialite('onetap', GoogleOneTapProvider::class);
+        $socialiteWasCalled->extendSocialite('onetap', GoogleOnetapProvider::class);
     }
 }
