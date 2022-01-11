@@ -562,7 +562,7 @@ class SocialAuth
         }
     }
 
-    private function getSuccessData()
+    public function getSuccessData()
     {
         if ( $this->isStateless() === false ) {
             return [];
