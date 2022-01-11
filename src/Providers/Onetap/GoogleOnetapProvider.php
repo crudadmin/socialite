@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 use Laravel\Socialite\Two\User;
 use Exception;
 
-class GoogleOneTapProvider extends AbstractProvider
+class GoogleOnetapProvider extends AbstractProvider
 {
     /**
      * The separating character for the requested scopes.
