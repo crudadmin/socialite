@@ -2,6 +2,7 @@
 
 namespace Admin\Socialite\Providers;
 
+use Admin\Socialite\Providers\EventsServiceProvider;
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        app()->register(EventsServiceProvider::class);
+
         $this->mergeConfigFrom(
             __DIR__.'/../Config/config.php', 'admin_socialite'
         );

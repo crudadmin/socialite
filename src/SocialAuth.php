@@ -240,8 +240,12 @@ class SocialAuth
 
             $response = $this->makeSuccessResponse();
         } catch (SocialDriverException $error) {
+            Log::error($error);
+
             $response = $this->makeErrorResponse();
         } catch (SocialMessageException $error) {
+            Log::error($error);
+
             $response = $this->makeErrorResponse($error->getMessage());
         }
 
@@ -574,7 +578,7 @@ class SocialAuth
         return [
             'auth_token' => $token->accessToken,
             'expires_in' => $token->token->expires_at->timestamp,
-            'previous_path' => $this->getPrevious() ?: '/',
+            'previous_path' => $this->getPrevious(),
         ];
     }
 
@@ -598,7 +602,7 @@ class SocialAuth
                 session()->flash($data, $value);
             }
 
-            return redirect($this->getPrevious() ? $this->getPrevious() : '/');
+            return redirect($this->getPrevious());
         }
 
         //If rest is disabled, we can redirect on given page with query params. This is stateless method
@@ -627,7 +631,7 @@ class SocialAuth
         $message = $message ?: sprintf(config('admin_socialite.messages.error'), $this->driverType);
 
         if ( $this->isStateless() ) {
-            $path = $this->getPrevious() ?: $this->getBaseDir();
+            $path = $this->getPrevious();
 
             $path = $this->addQueryParam($path, [
                 self::$errorMessageKey => $message
@@ -692,10 +696,10 @@ class SocialAuth
 
         //If is same current path
         if ( substr($previous, 0, strlen($current)) == $current ){
-            return;
+            return $this->getBaseDir();
         }
 
-        return $previous;
+        return $previous ?: $this->getBaseDir();
     }
 
     private function setPreviousState()

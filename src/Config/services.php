@@ -13,6 +13,12 @@ return [
         'redirect' => (env('SOCIALITE_APP_URL') ?: env('APP_URL')).'/socialite/google/callback',
     ],
 
+    'onetap' => [
+        'client_id' => env('GOOGLE_ID'),
+        'client_secret' => env('GOOGLE_SECRET'),
+        'redirect' => (env('SOCIALITE_APP_URL') ?: env('APP_URL')).'/socialite/onetap/callback',
+    ],
+
     'paypal_sandbox' => [
       'client_id' => env('PAYPAL_SANDBOX_CLIENT_ID'),
       'client_secret' => env('PAYPAL_SANDBOX_CLIENT_SECRET'),
