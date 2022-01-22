@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Crypt;
 use Laravel\Socialite\Facades\Socialite;
 use Exception;
+use Log;
 
 class SocialAuth
 {

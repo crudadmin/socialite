@@ -2,6 +2,7 @@
 
 namespace Admin\Socialite\Controllers;
 
+use Admin\Socialite\Events\OnSocialiteCallback;
 use Admin\Socialite\SocialAuth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -22,6 +23,10 @@ class SocialiteController extends Controller
 
     public function callback($driverType)
     {
-        return (new SocialAuth($driverType))->callbackResponse();
+        $auth = (new SocialAuth($driverType));
+
+        event(new OnSocialiteCallback($auth, $driverType));
+
+        return $auth->callbackResponse();
     }
 }
