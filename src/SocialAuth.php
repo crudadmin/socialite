@@ -46,12 +46,12 @@ class SocialAuth
      *
      * @var  string
      */
-    protected $photoColumn = 'photo';
+    public static $photoColumn = 'photo';
 
     /*
      * Driver user columns
      */
-    protected $driverColumns = [
+    public static $driverColumns = [
         'facebook' => 'fb',
         'google' => 'gp',
         'instagrambasic' => 'ig',
@@ -59,15 +59,7 @@ class SocialAuth
         'onetap' => 'gp',
         'paypal' => 'pp',
         'paypal_sandbox' => 'pp',
-    ];
-
-    /**
-     * Available supported drivers
-     *
-     * @var  array
-     */
-    protected $socialiteDrivers = [
-        'google', 'facebook', 'apple', 'instagrambasic', 'paypal', 'paypal_sandbox',
+        'azure' => 'az',
     ];
 
     /**
@@ -423,8 +415,9 @@ class SocialAuth
     {
         //When avatar has been downloaded
         if (
-            $this->photoColumn
-            && ($update === false || !($existingPhoto = $this->user->{$this->photoColumn}))
+            self::$photoColumn
+            && $this->user->getField(self::$photoColumn)
+            && ($update === false || !($existingPhoto = $this->user->{self::$photoColumn}))
             && $avatar = $this->saveAvatar($this->user)
         ) {
             //We need remove existing photo
@@ -432,7 +425,7 @@ class SocialAuth
                 $existingPhoto->remove();
             }
 
-            $this->user->{$this->photoColumn} = $avatar->filename;
+            $this->user->{self::$photoColumn} = $avatar->filename;
         }
 
         //Get email address by user if is not set
@@ -478,7 +471,7 @@ class SocialAuth
      */
     private function getDriverColumn($postfix)
     {
-        return $this->driverColumns[$this->driverType].'_'.$postfix;
+        return self::$driverColumns[$this->driverType].'_'.$postfix;
     }
 
     /**
@@ -490,7 +483,7 @@ class SocialAuth
     {
         $image = $this->driver->avatar;
 
-        if ( $image && $filename = $user->upload($this->photoColumn, $image) ) {
+        if ( $image && $filename = $user->upload(self::$photoColumn, $image) ) {
             return $filename;
         }
     }
@@ -526,7 +519,11 @@ class SocialAuth
 
         $this->assignSocialData($this->user);
 
-        $password = $this->user->password = str_random(6);
+        if ( $this->user->getField('password') ) {
+            $password = $this->user->password = str_random(6);
+        } else {
+            $password = null;
+        }
 
         $this->user->save();
         $this->user->fresh();
@@ -559,7 +556,7 @@ class SocialAuth
      */
     private function logUser()
     {
-        if ( $this->isStateless() == false && !$this->user ) {
+        if ( $this->isStateless() == false && $this->user ) {
             auth()->guard($this->getGuardName())->login(
                 $this->user,
                 true
