@@ -128,6 +128,8 @@ class SocialAuth
             $response = $this->makeErrorResponse($error->getMessage());
         }
 
-        return $this->flushSessionOnResponse($response);
+        $this->flushSessionOnResponse();
+
+        return $response;
     }
 }

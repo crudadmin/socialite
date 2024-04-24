@@ -23,11 +23,9 @@ trait HasStorage
         }
     }
 
-    protected function flushSessionOnResponse($response)
+    protected function flushSessionOnResponse()
     {
         session()->forget(self::SESSION_PREFIX);
-
-        return $response;
     }
 
     public function setStorage($key, $value)

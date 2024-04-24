@@ -30,4 +30,11 @@ trait HasEvents
     {
         static::$events[$event] = $callback;
     }
+
+    public function onSuccess($callback)
+    {
+        static::$events['SUCCESS_DATA_RESPONSE'] = $callback;
+
+        return $this;
+    }
 }
