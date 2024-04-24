@@ -33,7 +33,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //Load routes
-        $this->loadRoutesFrom(__DIR__.'/../Routes/routes.php');
+        if ( config('admin_socialite.routes') ){
+            $this->loadRoutesFrom(__DIR__.'/../Routes/routes.php');
+        }
 
         $this->prepareAppleSignIn();
 

@@ -29,4 +29,11 @@ class SocialiteController extends Controller
 
         return $auth->callbackResponse();
     }
+
+    public function token($driverType)
+    {
+        $auth = new SocialAuth($driverType);
+
+        return $auth->callbackResponse(request('token'), request('expires_in'));
+    }
 }

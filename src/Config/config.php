@@ -1,6 +1,11 @@
 <?php
 
 return [
+    /*
+     * Bind routes automatically
+     */
+    'routes' => true,
+
     /**
      * Response should be returned as API result
      */
