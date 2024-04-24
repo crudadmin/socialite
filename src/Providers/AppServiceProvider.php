@@ -36,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../Routes/routes.php');
 
         $this->prepareAppleSignIn();
+
+        $this->publishes([__DIR__.'/../Config/config.php' => config_path('admin_socialite.php')], 'socialite.config');
     }
 
     private function prepareAppleSignIn()
