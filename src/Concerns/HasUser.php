@@ -200,7 +200,12 @@ trait HasUser
         }
 
         //Asign username if not set
-        if ( !$user->username && $username = $this->driver->name ){
+        if ( !$user->username ){
+            //Generate username if is required and no username has been set.
+            if ( $user->hasFieldParam('username', 'required') && !$username = $this->driver->name ){
+                $username = $this->generateUsername($user);
+            }
+
             $user->username = $username;
         }
 
@@ -252,5 +257,20 @@ trait HasUser
     private function getDriverColumn($postfix)
     {
         return self::$driverColumns[$this->driverType].'_'.$postfix;
+    }
+
+    /**
+     * When no username is provided, return generated one.
+     *
+     * @param  string  $user
+     * @return  string
+     */
+    public function generateUsername($user)
+    {
+        if ( method_exists($user, 'generateUsername') ){
+            return $user->generateUsername();
+        }
+
+        return 'Anonym '.rand(0000, 9999);
     }
 }
