@@ -201,8 +201,11 @@ trait HasUser
 
         //Asign username if not set
         if ( !$user->username ){
+            //If no name has been set, find username query param. (For Apple sign-in is passed)
+            $username = $this->driver->name ?: trim(request('username', ''));
+
             //Generate username if is required and no username has been set.
-            if ( $user->hasFieldParam('username', 'required') && !$username = $this->driver->name ){
+            if ( $user->hasFieldParam('username', 'required') && !$username ){
                 $username = $this->generateUsername($user);
             }
 
