@@ -247,8 +247,15 @@ trait HasUser
     {
         $image = $this->driver->avatar;
 
-        if ( $image && $filename = $user->upload(self::$photoColumn, $image) ) {
-            return $filename;
+        if ( $image ) {
+            //Change image size for google sign in response
+            if ( strpos($image, 'googleusercontent.com') !== false ) {
+                $image = str_replace('=s96-c', '=s1024-c', $image);
+            }
+
+            if ( $filename = $user->upload(self::$photoColumn, $image) ) {
+                return $filename;
+            }
         }
     }
 
