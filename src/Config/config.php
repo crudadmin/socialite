@@ -18,6 +18,11 @@ return [
     'stateless' => false,
 
     /**
+     * Can user be registred when is missing?
+     */
+    'register' => true,
+
+    /**
      * Guard used for authentication.
      * If we use restfull API, we should use guard 'api'
      */

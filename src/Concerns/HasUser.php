@@ -32,6 +32,11 @@ trait HasUser
      */
     protected $user;
 
+    /*
+     * Enable registration
+     */
+    protected $registrationAllowed = true;
+
     /**
      * Client eloquent
      *
@@ -149,6 +154,10 @@ trait HasUser
      */
     protected function registerUser()
     {
+        if ( !$this->isRegistrationAllowed() ){
+            return;
+        }
+
         $this->user = clone $this->getUserModel();
 
         $this->assignSocialData($this->user);
@@ -298,5 +307,30 @@ trait HasUser
         }
 
         return 'Anonym '.rand(0000, 9999);
+    }
+
+    /*
+     * Can user be registerd?
+     */
+    public function isRegistrationAllowed()
+    {
+        if ( $this->registrationAllowed === false ) {
+            return false;
+        }
+
+        return config('admin_socialite.register', true);
+    }
+
+    /**
+     * Can user be registered during login flow?
+     *
+     * @param  bool  $state
+     *
+     */
+    public function allowRegister($state)
+    {
+        $this->registrationAllowed = $state;
+
+        return $this;
     }
 }
