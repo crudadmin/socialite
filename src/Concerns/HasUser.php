@@ -35,11 +35,21 @@ trait HasUser
     /**
      * Client eloquent
      *
+     * @param bool all
+     *
      * @return  AdminModel
      */
-    public function getUserModel()
+    public function getUserModel($all = false)
     {
-        return Admin::getModelByTable(config('admin_socialite.users_table'));
+        $models = array_map(function($table){
+            return Admin::getModelByTable($table);
+        }, array_wrap(config('admin_socialite.users_table')));
+
+        if ( $all === true ) {
+            return $models;
+        }
+
+        return $models[0];
     }
 
     /**
@@ -94,15 +104,21 @@ trait HasUser
      */
     protected function findByDriverUser()
     {
-        $user = $this->getUserModel()->where(function($query){
-            //Find by email
-            if ( !empty($this->driver->email) ) {
-                $query->where('email', $this->driver->email);
-            }
+        foreach ($this->getUserModel(true) as $model) {
+            $user = $model->where(function($query){
+                //Find by email
+                if ( !empty($this->driver->email) ) {
+                    $query->where('email', $this->driver->email);
+                }
 
-            //Find by driver identifier column
-            $query->orWhere($this->getDriverColumn('id'), $this->driver->id);
-        })->first();
+                //Find by driver identifier column
+                $query->orWhere($this->getDriverColumn('id'), $this->driver->id);
+            })->first();
+
+            if ( $user ) {
+                break;
+            }
+        }
 
         $this->setUser($user);
 
