@@ -6,6 +6,7 @@ use Admin\Socialite\Exceptions\SocialDriverException;
 use Admin\Socialite\Exceptions\SocialMessageException;
 use Exception;
 use Laravel\Socialite\Facades\Socialite;
+use Carbon\Carbon;
 
 trait HasDriver
 {

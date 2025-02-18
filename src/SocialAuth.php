@@ -9,8 +9,7 @@ use Admin\Socialite\Concerns\HasStorage;
 use Admin\Socialite\Concerns\HasUser;
 use Admin\Socialite\Exceptions\SocialDriverException;
 use Admin\Socialite\Exceptions\SocialMessageException;
-use Crypt;
-use Exception;
+use Socialite;
 use Log;
 
 class SocialAuth

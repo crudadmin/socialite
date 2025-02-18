@@ -13,7 +13,7 @@ trait HasStorage
 
         //Use access token of logged user
         if ( $this->isStateless() === true ) {
-            $paramsToStore = array_merge($this->queryParamsToStore, array_filter(explode(',', request('store'))));
+            $paramsToStore = array_merge([], array_filter(explode(',', request('store'))));
 
             foreach ($paramsToStore as $key) {
                 if ( $paramValue = request($key) ) {
