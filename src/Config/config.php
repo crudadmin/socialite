@@ -41,6 +41,11 @@ return [
     'users_table' => 'clients',
 
     /**
+     * If we should save avatars
+     */
+    'avatars' => true,
+
+    /**
      * Messages
      */
     'messages' => [

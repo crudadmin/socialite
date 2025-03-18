@@ -206,7 +206,8 @@ trait HasUser
     {
         //When avatar has been downloaded
         if (
-            self::$photoColumn
+            config('admin_socialite.avatars', true)
+            && self::$photoColumn
             && $this->user->getField(self::$photoColumn)
             && ($update === false || !($existingPhoto = $this->user->{self::$photoColumn}))
             && $avatar = $this->saveAvatar($this->user)
