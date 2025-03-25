@@ -139,7 +139,7 @@ trait HasUser
     protected function getLoggedUser($token = null)
     {
         //Use access token from session
-        if ( $token || ($token = $this->getStorage('access_token')) || ($token = request('access_token')) ){
+        if ( $token || ($token = $this->getTokenFromRequest()) ){
             request()->headers->set('Authorization', 'Bearer '.$token);
         }
 
@@ -148,6 +148,16 @@ trait HasUser
         );
 
         return $this->user;
+    }
+
+    /**
+     * getTokenFromRequest
+     *
+     * @return void
+     */
+    protected function getTokenFromRequest()
+    {
+        return $this->getStorage('access_token') ?: request('access_token');
     }
 
     /*

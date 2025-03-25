@@ -16,23 +16,27 @@ trait HasResponse
      */
     public function getDefaultSuccessData()
     {
-        $token = $this->user->createToken('driver-'.$this->driverType);
+        $tokenData = [];
 
-        //Sanctrum
-        if ( $token instanceof \Laravel\Sanctum\NewAccessToken ) {
-            $tokenString = $token->plainTextToken;
-            $expiresIn = $token->accessToken?->expired_at;
-        }
+        // Generate new token data if token is not in request
+        if ( is_null($this->getTokenFromRequest()) ) {
+            $token = $this->user->createToken('driver-'.$this->driverType);
 
-        //Scount
-        else {
-            $tokenString = $token->accessToken;
-            $expiresIn = $token->token?->expires_at?->timestamp;
+            //Sanctrum
+            if ( $token instanceof \Laravel\Sanctum\NewAccessToken ) {
+                $tokenData['auth_token'] = $token->plainTextToken;
+                $tokenData['expires_in'] = $token->accessToken?->expired_at;
+            }
+
+            //Scoun
+            else {
+                $tokenData['auth_token'] = $token->accessToken;
+                $tokenData['expires_in'] = $token->token?->expires_at?->timestamp;
+            }
         }
 
         return [
-            'auth_token' => $tokenString,
-            'expires_in' => $expiresIn,
+            ...$tokenData,
             'previous_path' => $this->getPrevious(),
         ];
     }
