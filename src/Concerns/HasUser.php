@@ -260,7 +260,7 @@ trait HasUser
 
         //Update token value
         if ( $user->getField($this->getDriverColumn('token')) ) {
-            $user->{$this->getDriverColumn('token')} = Crypt::encryptString($this->driver->accessToken);
+            $user->{$this->getDriverColumn('token')} = $this->driver->accessToken;
         }
 
         //Update token expires at value
