@@ -25,6 +25,7 @@ trait HasUser
         'paypal' => 'pp',
         'paypal_sandbox' => 'pp',
         'azure' => 'az',
+        'clickup' => 'cu',
     ];
 
     /*
