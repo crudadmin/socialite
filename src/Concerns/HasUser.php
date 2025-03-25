@@ -253,14 +253,14 @@ trait HasUser
             $user->{$this->getDriverColumn('id')} = $this->driver->id;
         }
 
+        //Save access token for given driver
+        if ( $user->getField($this->getDriverColumn('token')) ) {
+            $user->{$this->getDriverColumn('token')} = $this->driver->accessToken;
+        }
+
         //Save specific platform email
         if ( !empty($this->driver->email) && $user->getField($this->getDriverColumn('email')) ) {
             $user->{$this->getDriverColumn('email')} = $this->driver->email;
-        }
-
-        //Update token value
-        if ( $user->getField($this->getDriverColumn('token')) ) {
-            $user->{$this->getDriverColumn('token')} = $this->driver->accessToken;
         }
 
         //Update token expires at value
