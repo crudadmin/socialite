@@ -40,6 +40,10 @@ class SocialAuth
 
     public function isRest()
     {
+        if ( request()->wantsJson() ) {
+            return true;
+        }
+
         return config('admin_socialite.rest');
     }
 
