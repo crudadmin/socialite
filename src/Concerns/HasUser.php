@@ -330,7 +330,9 @@ trait HasUser
             return false;
         }
 
-        return config('admin_socialite.register', true);
+        $canRegister = config('admin_socialite.register', true);
+
+        return $canRegister === true || in_array($this->driverType, $canRegister);
     }
 
     /**
