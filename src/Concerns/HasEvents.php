@@ -15,6 +15,7 @@ trait HasEvents
         // },
         // 'DRIVER_MUTATE' => function($driver, SocialAuth $auth){ },
         // 'DRIVER_MIDDLEWARE' => function($user, $driver, SocialAuth $auth){ },
+        // 'USER_CREATED' => function($user, $driver, SocialAuth $auth){ },
         // 'USER_FETCH' => function($user, $driver, SocialAuth $auth){ },
         // 'USER_MUTATE' => function($user, $driver, SocialAuth $auth){ },
         // 'USER_UPDATE' => function($user, $driver, SocialAuth $auth){ },
