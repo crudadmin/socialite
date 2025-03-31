@@ -95,7 +95,15 @@ trait HasUser
      */
     protected function loginUser()
     {
-        if ( $this->isStateless() == false && $this->user ) {
+        if ( !$this->user ) {
+            return;
+        }
+
+        if ( is_callable(@static::$events['USER']) ) {
+            static::$events['USER']($this->user, $this->driver, $this);
+        }
+
+        if ( $this->isStateless() == false ) {
             $this->getAuth()->login(
                 $this->user,
                 true

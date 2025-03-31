@@ -19,6 +19,7 @@ trait HasEvents
         // 'USER_FETCH' => function($user, $driver, SocialAuth $auth){ },
         // 'USER_MUTATE' => function($user, $driver, SocialAuth $auth){ },
         // 'USER_UPDATE' => function($user, $driver, SocialAuth $auth){ },
+        // 'USER' => function($user, $driver, SocialAuth $auth){ },
     ];
 
     /**
