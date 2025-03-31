@@ -19,7 +19,7 @@ trait HasResponse
         $tokenData = [];
 
         // Generate new token data if token is not in request
-        if ( is_null($this->getTokenFromRequest()) ) {
+        if ( $this->user && is_null($this->getTokenFromRequest()) ) {
             $token = $this->user->createToken('driver-'.$this->driverType);
 
             //Sanctrum

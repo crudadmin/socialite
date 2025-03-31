@@ -40,11 +40,7 @@ class SocialAuth
 
     public function isRest()
     {
-        if ( request()->wantsJson() ) {
-            return true;
-        }
-
-        return config('admin_socialite.rest');
+        return request()->wantsJson() ? true : false;
     }
 
     public function isStateless()

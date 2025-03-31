@@ -7,11 +7,6 @@ return [
     'routes' => true,
 
     /**
-     * Response should be returned as API result
-     */
-    'rest' => false,
-
-    /**
      * Access keys and results will be passed into query_params, because we does not use session
      * If rest is true, stateless need's to be true as well.
      */
