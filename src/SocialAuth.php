@@ -2,15 +2,17 @@
 
 namespace Admin\Socialite;
 
+use Log;
+use Socialite;
+use Admin\Socialite\Concerns\HasUser;
+use Illuminate\Support\Facades\Event;
 use Admin\Socialite\Concerns\HasDriver;
 use Admin\Socialite\Concerns\HasEvents;
-use Admin\Socialite\Concerns\HasResponse;
 use Admin\Socialite\Concerns\HasStorage;
-use Admin\Socialite\Concerns\HasUser;
+use Admin\Socialite\Concerns\HasResponse;
+use SocialiteProviders\Manager\SocialiteWasCalled;
 use Admin\Socialite\Exceptions\SocialDriverException;
 use Admin\Socialite\Exceptions\SocialMessageException;
-use Socialite;
-use Log;
 
 class SocialAuth
 {
@@ -59,6 +61,25 @@ class SocialAuth
     private function getBaseDir()
     {
         return config('admin_socialite.app_url');
+    }
+
+    /**
+     * Register a new custom driver
+     *
+     * @param  string $code
+     * @param  string $name
+     * @param  classname $provider
+     * @return void
+     */
+    public static function addDriver(string $code, string $name, $provider = null)
+    {
+        self::$driverColumns[$code] = $name;
+
+        if ( $provider ){
+            Event::listen(function (SocialiteWasCalled $event) use ($code, $provider) {
+                $event->extendSocialite($code, $provider);
+            });
+        }
     }
 
     /**
