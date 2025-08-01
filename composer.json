@@ -1,12 +1,20 @@
 {
     "name": "crudadmin/socialite",
     "type": "library",
-    "description": "Package with full socialute support",
-    "keywords": ["crudadmin", "socialite", "admin", "laravel"],
+    "description": "Package with full socialite support",
+    "keywords": [
+        "crudadmin",
+        "socialite",
+        "admin",
+        "laravel"
+    ],
     "homepage": "https://marekgogol.sk",
     "license": "MIT",
     "authors": [
-        { "name": "Marek Gogoľ", "email": "info@marekgogol.sk" }
+        {
+            "name": "Marek Gogoľ",
+            "email": "info@marekgogol.sk"
+        }
     ],
     "require": {
         "php": ">=8.0.0",
